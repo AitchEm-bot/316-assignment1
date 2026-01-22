@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  spark-notebook:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: bigboyz-spark
+    ports:
+      - "8888:8888"   # Jupyter
+      - "4040:4040"   # Spark UI
+    volumes:
+      - ../data:/home/jovyan/work/data
+      - ../notebooks:/home/jovyan/work/notebooks
+      - ../src:/home/jovyan/work/src
+      - ../outputs:/home/jovyan/work/outputs
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - SPARK_DRIVER_MEMORY=4g
+      - SPARK_EXECUTOR_MEMORY=4g
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
