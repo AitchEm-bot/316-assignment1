@@ -69,6 +69,7 @@ class BaggingRegressor:
         n_estimators=10,
         max_depth=10,
         min_instances_per_node=1,
+        max_bins=256,
         seed=42,
         features_col='features',
         label_col='label'
@@ -80,6 +81,8 @@ class BaggingRegressor:
             n_estimators: Number of trees in the ensemble (default 10)
             max_depth: Maximum depth of each tree (default 10)
             min_instances_per_node: Minimum instances per leaf node (default 1)
+            max_bins: Max bins for discretizing continuous features and
+                     determining splits for categorical features (default 256)
             seed: Random seed for reproducibility (default 42)
             features_col: Name of features column (default 'features')
             label_col: Name of label column (default 'label')
@@ -87,6 +90,7 @@ class BaggingRegressor:
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.min_instances_per_node = min_instances_per_node
+        self.max_bins = max_bins
         self.seed = seed
         self.features_col = features_col
         self.label_col = label_col
@@ -116,6 +120,7 @@ class BaggingRegressor:
             print(f"TRAINING BAGGING ENSEMBLE ({self.n_estimators} estimators)")
             print("=" * 60)
             print(f"  Max depth: {self.max_depth}")
+            print(f"  Max bins: {self.max_bins}")
             print(f"  Min instances per node: {self.min_instances_per_node}")
             print(f"  Random seed: {self.seed}")
 
@@ -140,6 +145,7 @@ class BaggingRegressor:
                 predictionCol=f'prediction_{i}',  # Unique prediction column
                 maxDepth=self.max_depth,
                 minInstancesPerNode=self.min_instances_per_node,
+                maxBins=self.max_bins,
                 seed=tree_seed
             )
 
@@ -242,6 +248,7 @@ class BaggingRegressor:
         return {
             'n_estimators': self.n_estimators,
             'max_depth': self.max_depth,
+            'max_bins': self.max_bins,
             'min_instances_per_node': self.min_instances_per_node,
             'seed': self.seed,
             'features_col': self.features_col,
@@ -256,7 +263,7 @@ class BaggingRegressor:
         )
 
 
-def create_bagging_model_builder(n_estimators=10, max_depth=10, seed=42):
+def create_bagging_model_builder(n_estimators=10, max_depth=10, max_bins=256, seed=42):
     """
     Factory function that creates a BaggingRegressor builder function.
 
@@ -266,6 +273,7 @@ def create_bagging_model_builder(n_estimators=10, max_depth=10, seed=42):
     Args:
         n_estimators: Number of trees
         max_depth: Maximum tree depth
+        max_bins: Max bins for categorical features (must be >= max unique values)
         seed: Random seed
 
     Returns:
@@ -275,6 +283,7 @@ def create_bagging_model_builder(n_estimators=10, max_depth=10, seed=42):
         return BaggingRegressor(
             n_estimators=n_estimators,
             max_depth=max_depth,
+            max_bins=max_bins,
             seed=seed
         )
     return builder
