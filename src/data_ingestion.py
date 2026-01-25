@@ -36,26 +36,58 @@ def create_spark_session(app_name="bigboyz-dubai-real-estate"):
 def get_transactions_schema():
     """
     Returns the schema for the Dubai Land Department transactions dataset.
-    Adjust field names and types based on actual dataset columns.
+    Based on actual Transactions.csv from Dubai Pulse.
 
     Returns:
         StructType: Schema definition for transactions data
     """
-    # TODO: Update this schema based on actual CSV column names
-    # These are placeholder field names - inspect the actual CSV headers
     schema = StructType([
         StructField("transaction_id", StringType(), True),
-        StructField("transaction_date", StringType(), True),
-        StructField("transaction_type", StringType(), True),
-        StructField("property_type", StringType(), True),
-        StructField("property_subtype", StringType(), True),
-        StructField("area_name", StringType(), True),
-        StructField("building_name", StringType(), True),
-        StructField("project_name", StringType(), True),
-        StructField("amount", DoubleType(), True),
-        StructField("property_size_sqm", DoubleType(), True),
-        StructField("rooms", StringType(), True),
-        StructField("parking", StringType(), True),
+        StructField("procedure_id", StringType(), True),
+        StructField("trans_group_id", StringType(), True),
+        StructField("trans_group_ar", StringType(), True),
+        StructField("trans_group_en", StringType(), True),
+        StructField("procedure_name_ar", StringType(), True),
+        StructField("procedure_name_en", StringType(), True),
+        StructField("instance_date", StringType(), True),
+        StructField("property_type_id", StringType(), True),
+        StructField("property_type_ar", StringType(), True),
+        StructField("property_type_en", StringType(), True),
+        StructField("property_sub_type_id", StringType(), True),
+        StructField("property_sub_type_ar", StringType(), True),
+        StructField("property_sub_type_en", StringType(), True),
+        StructField("property_usage_ar", StringType(), True),
+        StructField("property_usage_en", StringType(), True),
+        StructField("reg_type_id", StringType(), True),
+        StructField("reg_type_ar", StringType(), True),
+        StructField("reg_type_en", StringType(), True),
+        StructField("area_id", StringType(), True),
+        StructField("area_name_ar", StringType(), True),
+        StructField("area_name_en", StringType(), True),
+        StructField("building_name_ar", StringType(), True),
+        StructField("building_name_en", StringType(), True),
+        StructField("project_number", StringType(), True),
+        StructField("project_name_ar", StringType(), True),
+        StructField("project_name_en", StringType(), True),
+        StructField("master_project_en", StringType(), True),
+        StructField("master_project_ar", StringType(), True),
+        StructField("nearest_landmark_ar", StringType(), True),
+        StructField("nearest_landmark_en", StringType(), True),
+        StructField("nearest_metro_ar", StringType(), True),
+        StructField("nearest_metro_en", StringType(), True),
+        StructField("nearest_mall_ar", StringType(), True),
+        StructField("nearest_mall_en", StringType(), True),
+        StructField("rooms_ar", StringType(), True),
+        StructField("rooms_en", StringType(), True),
+        StructField("has_parking", IntegerType(), True),
+        StructField("procedure_area", DoubleType(), True),
+        StructField("actual_worth", DoubleType(), True),
+        StructField("meter_sale_price", DoubleType(), True),
+        StructField("rent_value", DoubleType(), True),
+        StructField("meter_rent_price", DoubleType(), True),
+        StructField("no_of_parties_role_1", IntegerType(), True),
+        StructField("no_of_parties_role_2", IntegerType(), True),
+        StructField("no_of_parties_role_3", IntegerType(), True),
     ])
     return schema
 

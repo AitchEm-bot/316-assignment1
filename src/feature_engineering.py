@@ -15,14 +15,14 @@ from pyspark.ml.feature import (
 from pyspark.ml import Pipeline
 
 
-def extract_temporal_features(df, date_col, date_format='yyyy-MM-dd'):
+def extract_temporal_features(df, date_col, date_format='dd-MM-yyyy'):
     """
     Extracts temporal features from a date column.
 
     Args:
         df: Input Spark DataFrame
         date_col: Name of the date column
-        date_format: Format of the date string
+        date_format: Format of the date string (default: dd-MM-yyyy for Dubai data)
 
     Returns:
         DataFrame: DataFrame with additional temporal features

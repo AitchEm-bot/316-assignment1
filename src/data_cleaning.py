@@ -83,13 +83,13 @@ def filter_transaction_type(df, transaction_type_col, keep_types=None):
     Args:
         df: Input Spark DataFrame
         transaction_type_col: Name of the column containing transaction type
-        keep_types: List of transaction types to keep (e.g., ['Sales', 'Sale'])
+        keep_types: List of transaction types to keep (e.g., ['Sales'])
 
     Returns:
         DataFrame: Filtered DataFrame
     """
     if keep_types is None:
-        keep_types = ['Sales', 'Sale', 'SALES', 'SALE']
+        keep_types = ['Sales']  # Dubai Land Department uses 'Sales' for sale transactions
 
     # Normalize and filter
     df_filtered = df.filter(
