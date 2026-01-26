@@ -209,6 +209,21 @@ class BaggingRegressor:
 
         return result_df
 
+    def transform(self, test_df):
+        """
+        Alias for predict() to maintain compatibility with Spark MLlib interface.
+
+        This allows BaggingRegressor to be used with manual_cross_validate()
+        which expects models to have a transform() method.
+
+        Args:
+            test_df: Test DataFrame with 'features' column
+
+        Returns:
+            DataFrame: DataFrame with 'prediction' column
+        """
+        return self.predict(test_df)
+
     def get_feature_importance(self, feature_names=None):
         """
         Aggregates feature importance across all base models.

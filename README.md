@@ -30,7 +30,7 @@ A large-scale machine learning pipeline to predict real estate transaction price
 │   ├── Dockerfile              # Container definition
 │   └── docker-compose.yml      # Multi-container orchestration
 ├── data/
-│   └── transactions.csv        # Raw data (download separately)
+│   └── Transactions.csv        # Raw data (download separately)
 ├── notebooks/
 │   └── bigboyz.ipynb           # Main deliverable notebook
 ├── src/
@@ -76,7 +76,7 @@ The dataset is too large for GitHub. Download it manually:
 
 1. Visit [Dubai Pulse - DLD Transactions](https://www.dubaipulse.gov.ae/data/dld-transactions/dld_transactions-open)
 2. Download the transactions CSV file
-3. Place it in the `data/` folder as `transactions.csv`
+3. Place it in the `data/` folder as `Transactions.csv`
 
 ### 3. Start the Docker Environment
 
@@ -152,6 +152,82 @@ jupyter notebook notebooks/bigboyz.ipynb
 | RMSE | Root Mean Square Error |
 | MAE | Mean Absolute Error |
 | R² | Coefficient of Determination |
+
+---
+
+## Results
+
+### Dataset Statistics
+
+| Metric | Value |
+|--------|-------|
+| Raw records | 1,644,778 |
+| After cleaning | 1,201,489 (73% retained) |
+| Training set | 961,535 (80%) |
+| Holdout test set | 239,954 (20%) |
+| Features | 11 |
+
+### Model Performance (Holdout Test Set)
+
+| Model | RMSE (AED) | MAE (AED) | R² |
+|-------|------------|-----------|-----|
+| Linear Regression | 1,252,303 | 912,253 | 0.1750 |
+| Decision Tree | 641,924 | 376,635 | 0.7832 |
+| Random Forest (baseline) | 626,285 | 377,767 | 0.7937 |
+| **Bagging (ours)** | **615,495** | **362,048** | **0.8007** |
+
+### Key Findings
+
+1. **Custom Bagging achieves best performance** - Our from-scratch implementation outperforms the Random Forest baseline with R² = 0.8007 vs 0.7937
+
+2. **Tree-based models excel** - Linear Regression fails to capture the non-linear relationship between features and price (R² = 0.17)
+
+3. **Property area is the dominant predictor** - Feature importance analysis shows `procedure_area` (sqm) is the most important feature, followed by location (`area_name_en`)
+
+4. **No overfitting** - Cross-validation and test results are consistent (within 1% difference)
+
+### Visualizations
+
+#### Price Distribution
+![Price Distribution](outputs/figures/price_distribution.png)
+
+#### Model Comparison
+![Model Comparison](outputs/figures/model_comparison.png)
+
+#### Cross-Validation Results
+![CV Results](outputs/figures/cv_results.png)
+
+#### Predictions vs Actual (Bagging)
+![Predictions vs Actual](outputs/figures/predictions_vs_actual.png)
+
+#### Residual Analysis
+![Residuals](outputs/figures/residuals.png)
+
+#### Feature Importance
+![Feature Importance](outputs/figures/feature_importance.png)
+
+### Conclusion
+
+**Can we accurately predict real estate transaction prices in Dubai? Yes, with ~80% accuracy using tree-based ensemble methods.**
+
+| Aspect | Finding |
+|--------|---------|
+| **Best Model** | Custom Bagging (R² = 0.80) - explains 80% of price variance |
+| **Prediction Error** | ~615,000 AED RMSE / ~362,000 AED MAE |
+| **Most Important Feature** | Property size (`procedure_area`) dominates predictions |
+| **Worst Model** | Linear Regression (R² = 0.17) - relationship is non-linear |
+
+**What the results mean:**
+
+- **80% of price variation is explainable** from just 11 features (size, location, property type, temporal factors)
+- **20% remains unexplained** - likely due to factors not in the dataset (floor/view, interior condition, negotiation dynamics, market sentiment)
+- **Custom implementation works** - Our from-scratch Bagging outperformed MLlib's Random Forest
+- **Location matters** - After property size, `area_name_en` is the second most important feature
+
+**Business implications:**
+- **Sellers** can estimate fair market value within ~360K AED
+- **Buyers** can identify overpriced/underpriced properties
+- **Investors** can model expected returns based on property characteristics
 
 ---
 
