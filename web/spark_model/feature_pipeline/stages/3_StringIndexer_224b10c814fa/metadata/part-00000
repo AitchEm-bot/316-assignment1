@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexerModel","timestamp":1769448987087,"sparkVersion":"3.5.0","uid":"StringIndexer_224b10c814fa","paramMap":{"handleInvalid":"keep","outputCol":"nearest_metro_en_indexed","inputCol":"nearest_metro_en"},"defaultParamMap":{"handleInvalid":"error","outputCol":"StringIndexer_224b10c814fa__output","stringOrderType":"frequencyDesc"}}

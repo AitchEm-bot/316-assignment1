@@ -1,0 +1,10 @@
+{
+  "n_estimators": 10,
+  "max_depth": 10,
+  "max_bins": 256,
+  "min_instances_per_node": 1,
+  "seed": 42,
+  "features_col": "features",
+  "label_col": "label",
+  "n_trees_saved": 10
+}

@@ -41,6 +41,10 @@ A large-scale machine learning pipeline to predict real estate transaction price
 │   ├── cross_validation.py     # Manual 10-fold CV (FROM SCRATCH)
 │   ├── bagging_ensemble.py     # Bagging implementation (FROM SCRATCH)
 │   └── evaluation.py           # Metrics & visualization
+├── web/
+│   ├── app.py                  # Streamlit web interface
+│   ├── train_model.py          # Model training for web app
+│   └── requirements.txt        # Web app dependencies
 ├── outputs/
 │   └── figures/                # Generated charts/plots
 ├── report/                     # Final report PDF
@@ -114,6 +118,93 @@ pip install pyspark jupyter
 # Start Jupyter
 jupyter notebook notebooks/bigboyz.ipynb
 ```
+
+---
+
+## Web Interface (Streamlit)
+
+The project includes a web interface that allows users to interactively predict real estate prices using the custom BaggingRegressor model.
+
+### Features
+- Input property details through an intuitive UI
+- Uses the **actual custom BaggingRegressor** (from scratch) with PySpark
+- Real-time price predictions
+- Model performance metrics display
+
+### Running the Web Interface (Docker - Recommended)
+
+The web app runs inside Docker, so you don't need to install Java or PySpark locally. **The model is pre-trained and ready to use** - no additional setup required.
+
+#### Step 1: Start Docker Services
+
+```bash
+cd docker
+docker-compose up --build
+```
+
+This starts two services:
+- **Jupyter Notebook** at `http://localhost:8888`
+- **Web Interface** at `http://localhost:8501`
+
+#### Step 2: Access the Web Interface
+
+Open your browser and navigate to:
+```
+http://localhost:8501
+```
+
+The model is pre-trained and included in the repository, so you can start making predictions immediately.
+
+#### (Optional) Re-train the Model
+
+If you want to re-train the model with new data or different parameters:
+
+```bash
+docker exec -it bigboyz-spark bash -c "export PYTHONPATH=/usr/local/spark/python:/usr/local/spark/python/lib/py4j-0.10.9.7-src.zip && cd /home/jovyan/work/web && python train_model.py"
+```
+
+### Running Without Docker (Requires Java 8+ and PySpark)
+
+If you prefer to run locally, you need Java and PySpark installed:
+
+```bash
+# Install Java (if not installed)
+# Windows: Download from https://adoptium.net/
+# macOS: brew install openjdk@11
+# Linux: sudo apt install openjdk-11-jdk
+
+# Install PySpark
+pip install pyspark
+
+# Start the web app (model is pre-trained)
+cd web
+streamlit run app.py
+```
+
+### Web Interface Files
+
+```
+web/
+├── app.py              # Streamlit application
+├── train_model.py      # PySpark model training script
+├── requirements.txt    # Web app dependencies
+├── spark_model/        # Pre-trained model (included in repo)
+│   ├── bagging_model/  # Custom BaggingRegressor trees (10 trees)
+│   └── feature_pipeline/ # StringIndexers and VectorAssembler
+├── feature_options.json # Dropdown values for UI
+└── model_config.json    # Model configuration and metrics
+```
+
+### Input Fields
+
+The web interface allows you to:
+1. Enter property size in sqm
+2. Select property type (Villa, Land, Building, Unit)
+3. Select property usage (Residential, Commercial, etc.)
+4. Select Dubai area from 231 neighborhoods
+5. Select nearest metro station and mall
+6. Pick a transaction date
+7. Get instant price predictions
 
 ---
 

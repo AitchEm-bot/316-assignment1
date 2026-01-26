@@ -1,0 +1,39 @@
+{
+  "feature_cols": [
+    "procedure_area",
+    "has_parking",
+    "trans_year",
+    "trans_month",
+    "trans_quarter",
+    "trans_dayofweek",
+    "property_type_en_indexed",
+    "property_usage_en_indexed",
+    "area_name_en_indexed",
+    "nearest_metro_en_indexed",
+    "nearest_mall_en_indexed"
+  ],
+  "categorical_cols": [
+    "property_type_en",
+    "property_usage_en",
+    "area_name_en",
+    "nearest_metro_en",
+    "nearest_mall_en"
+  ],
+  "numeric_cols": [
+    "procedure_area",
+    "has_parking",
+    "trans_year",
+    "trans_month",
+    "trans_quarter",
+    "trans_dayofweek"
+  ],
+  "target_col": "actual_worth",
+  "model_type": "Custom BaggingRegressor (FROM SCRATCH)",
+  "n_estimators": 10,
+  "max_depth": 10,
+  "test_metrics": {
+    "rmse": 610095.0039545493,
+    "mae": 361630.26986279915,
+    "r2": 0.7997415815349896
+  }
+}

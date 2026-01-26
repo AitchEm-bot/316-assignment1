@@ -278,6 +278,85 @@ class BaggingRegressor:
         )
 
 
+def save_bagging_model(model, path):
+    """
+    Saves a trained BaggingRegressor to disk.
+
+    Each tree model is saved to a separate directory.
+    Model parameters are saved to a JSON file.
+
+    Args:
+        model: Trained BaggingRegressor instance
+        path: Directory path to save the model
+    """
+    import os
+    import json
+
+    if not model._is_fitted:
+        raise RuntimeError("Cannot save unfitted model")
+
+    # Create directory if it doesn't exist
+    os.makedirs(path, exist_ok=True)
+
+    # Save each tree model
+    for i, tree_model in enumerate(model.models):
+        tree_path = os.path.join(path, f"tree_{i}")
+        tree_model.write().overwrite().save(tree_path)
+
+    # Save model parameters
+    params = model.get_params()
+    params['n_trees_saved'] = len(model.models)
+    params_path = os.path.join(path, "params.json")
+    with open(params_path, 'w') as f:
+        json.dump(params, f, indent=2)
+
+    print(f"Saved BaggingRegressor with {len(model.models)} trees to {path}")
+
+
+def load_bagging_model(path):
+    """
+    Loads a trained BaggingRegressor from disk.
+
+    Args:
+        path: Directory path where the model was saved
+
+    Returns:
+        BaggingRegressor: Loaded model ready for predictions
+    """
+    import os
+    import json
+    from pyspark.ml.regression import DecisionTreeRegressionModel
+
+    # Load parameters
+    params_path = os.path.join(path, "params.json")
+    with open(params_path, 'r') as f:
+        params = json.load(f)
+
+    # Create BaggingRegressor with saved parameters
+    model = BaggingRegressor(
+        n_estimators=params['n_estimators'],
+        max_depth=params['max_depth'],
+        max_bins=params['max_bins'],
+        min_instances_per_node=params['min_instances_per_node'],
+        seed=params['seed'],
+        features_col=params['features_col'],
+        label_col=params['label_col']
+    )
+
+    # Load each tree model
+    n_trees = params['n_trees_saved']
+    model.models = []
+    for i in range(n_trees):
+        tree_path = os.path.join(path, f"tree_{i}")
+        tree_model = DecisionTreeRegressionModel.load(tree_path)
+        model.models.append(tree_model)
+
+    model._is_fitted = True
+    print(f"Loaded BaggingRegressor with {len(model.models)} trees from {path}")
+
+    return model
+
+
 def create_bagging_model_builder(n_estimators=10, max_depth=10, max_bins=256, seed=42):
     """
     Factory function that creates a BaggingRegressor builder function.

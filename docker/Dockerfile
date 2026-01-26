@@ -13,4 +13,7 @@ USER ${NB_UID}
 COPY requirements.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+# Install Streamlit for web interface
+RUN pip install --no-cache-dir streamlit
+
 WORKDIR /home/jovyan/work

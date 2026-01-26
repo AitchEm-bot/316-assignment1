@@ -34,6 +34,8 @@ Thumbs.db
 metastore_db/
 spark-warehouse/
 derby.log
+*.crc
+_SUCCESS
 
 # Outputs (optional - uncomment if you want to exclude)
 # outputs/models/
@@ -42,3 +44,6 @@ derby.log
 *.tmp
 *.temp
 *.log
+
+# Ignore claude files
+.claude

@@ -14,8 +14,28 @@ services:
       - ../notebooks:/home/jovyan/work/notebooks
       - ../src:/home/jovyan/work/src
       - ../outputs:/home/jovyan/work/outputs
+      - ../web:/home/jovyan/work/web
     environment:
       - JUPYTER_ENABLE_LAB=yes
       - SPARK_DRIVER_MEMORY=4g
       - SPARK_EXECUTOR_MEMORY=4g
     command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+
+  web-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: bigboyz-web
+    ports:
+      - "8501:8501"   # Streamlit
+    volumes:
+      - ../data:/home/jovyan/work/data
+      - ../src:/home/jovyan/work/src
+      - ../web:/home/jovyan/work/web
+    environment:
+      - SPARK_DRIVER_MEMORY=2g
+      - PYTHONPATH=/usr/local/spark/python:/usr/local/spark/python/lib/py4j-0.10.9.7-src.zip
+    working_dir: /home/jovyan/work/web
+    command: streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+    depends_on:
+      - spark-notebook
