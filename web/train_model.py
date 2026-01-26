@@ -38,6 +38,8 @@ def create_spark_session():
         .appName("bigboyz-web-training") \
         .config("spark.driver.memory", "4g") \
         .config("spark.sql.shuffle.partitions", "8") \
+        .config("spark.hadoop.fs.local.checksum.disabled", "true") \
+        .config("spark.hadoop.mapreduce.fileoutputcommitter.marksuccessfuljobs", "false") \
         .getOrCreate()
 
 
